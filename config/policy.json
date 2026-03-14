@@ -1,0 +1,87 @@
+{
+  "mode": "default",
+  "users": {
+    "alice": {
+      "tenant": "acme_corp",
+      "clearance": "standard",
+      "department": "research"
+    },
+    "bob": {
+      "tenant": "acme_corp",
+      "clearance": "admin",
+      "department": "engineering"
+    },
+    "external_user": {
+      "tenant": "external_corp",
+      "clearance": "public",
+      "department": "consulting"
+    }
+  },
+  "agents": {
+    "research_agent": {
+      "allowed_tools": {
+        "read_file": {
+          "constraints": {
+            "path_prefix": "/data/research/"
+          }
+        },
+        "send_email": {
+          "constraints": {
+            "allowed_domains": ["company.com"]
+          }
+        },
+        "query_database": {
+          "constraints": {
+            "read_only": true
+          }
+        }
+      },
+      "allowed_tenants": ["acme_corp"]
+    },
+    "admin_agent": {
+      "allowed_tools": {
+        "read_file": {
+          "constraints": {
+            "path_prefix": "/"
+          }
+        },
+        "write_file": {
+          "constraints": {
+            "path_prefix": "/data/"
+          }
+        },
+        "send_email": {
+          "constraints": {
+            "allowed_domains": ["company.com", "admin.internal"]
+          }
+        },
+        "query_database": {
+          "constraints": {
+            "read_only": false
+          }
+        }
+      },
+      "allowed_tenants": ["acme_corp"]
+    }
+  },
+  "identity_rules": {
+    "max_delegation_depth": 3,
+    "require_purpose": false
+  },
+  "abac": {
+    "tenant_isolation": true,
+    "clearance_levels": ["public", "standard", "confidential", "admin"]
+  },
+  "tool_clearances": {
+    "write_file": "standard",
+    "query_database": "standard"
+  },
+  "risk_threshold": 70,
+  "sensitive_tools": ["write_file", "send_email", "query_database"],
+  "risk_weights": {
+    "sensitive_tool": 20,
+    "suspicious_prompt": 30,
+    "parameter_violation": 40,
+    "unknown_agent": 50
+  }
+}

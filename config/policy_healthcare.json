@@ -1,0 +1,138 @@
+{
+    "mode": "healthcare",
+    "users": {
+        "dr_smith": {
+            "tenant": "city_hospital",
+            "clearance": "confidential",
+            "department": "cardiology"
+        },
+        "nurse_jones": {
+            "tenant": "city_hospital",
+            "clearance": "standard",
+            "department": "nursing"
+        },
+        "external_researcher": {
+            "tenant": "university_lab",
+            "clearance": "public",
+            "department": "research"
+        }
+    },
+    "agents": {
+        "clinical_agent": {
+            "allowed_tools": {
+                "read_file": {
+                    "constraints": {
+                        "path_prefix": "/patient_records/"
+                    }
+                },
+                "send_email": {
+                    "constraints": {
+                        "allowed_domains": [
+                            "hospital.org",
+                            "health.gov"
+                        ]
+                    }
+                },
+                "query_database": {
+                    "constraints": {
+                        "read_only": true
+                    }
+                }
+            },
+            "allowed_tenants": [
+                "city_hospital"
+            ]
+        },
+        "admin_agent": {
+            "allowed_tools": {
+                "read_file": {
+                    "constraints": {
+                        "path_prefix": "/"
+                    }
+                },
+                "write_file": {
+                    "constraints": {
+                        "path_prefix": "/patient_records/"
+                    }
+                },
+                "send_email": {
+                    "constraints": {
+                        "allowed_domains": [
+                            "hospital.org",
+                            "health.gov",
+                            "admin.internal"
+                        ]
+                    }
+                },
+                "query_database": {
+                    "constraints": {
+                        "read_only": false
+                    }
+                }
+            },
+            "allowed_tenants": [
+                "city_hospital"
+            ]
+        }
+    },
+    "identity_rules": {
+        "max_delegation_depth": 2,
+        "require_purpose": true
+    },
+    "abac": {
+        "tenant_isolation": true,
+        "clearance_levels": [
+            "public",
+            "standard",
+            "confidential",
+            "admin"
+        ]
+    },
+    "tool_clearances": {
+        "read_file": "standard",
+        "write_file": "confidential",
+        "query_database": "standard",
+        "send_email": "standard"
+    },
+    "allowed_purposes": {
+        "read_file": [
+            "patient_care",
+            "clinical_review",
+            "audit",
+            "reporting"
+        ],
+        "write_file": [
+            "patient_care",
+            "clinical_update"
+        ],
+        "send_email": [
+            "patient_notification",
+            "referral",
+            "reporting"
+        ],
+        "query_database": [
+            "patient_care",
+            "clinical_review",
+            "reporting",
+            "audit"
+        ]
+    },
+    "phi_tools": [
+        "read_file",
+        "write_file",
+        "query_database"
+    ],
+    "risk_threshold": 50,
+    "sensitive_tools": [
+        "write_file",
+        "send_email",
+        "query_database",
+        "read_file"
+    ],
+    "risk_weights": {
+        "sensitive_tool": 15,
+        "suspicious_prompt": 40,
+        "parameter_violation": 45,
+        "unknown_agent": 50
+    }
+}

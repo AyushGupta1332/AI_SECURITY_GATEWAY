@@ -1,0 +1,17 @@
+{
+    "enabled": true,
+    "_comment": "API keys are stored as SHA-256 hashes. To add a new key: python -c \"import hashlib; print(hashlib.sha256(b'your-key').hexdigest())\"",
+    "_dev_key_plaintext": "sg-dev-key-2026 (REMOVE THIS FIELD IN PRODUCTION)",
+    "keys": {
+        "fbb5343ac765cee38ffa41dce93f658a35d0efc3cd3faac2c3acb7d67065b4a1": {
+            "name": "dev-key",
+            "active": true,
+            "description": "Development API key — replace in production",
+            "permissions": [
+                "execute_tool",
+                "reload_policy",
+                "switch_mode"
+            ]
+        }
+    }
+}
